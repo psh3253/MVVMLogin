@@ -11,7 +11,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class LoginRepository(private val appDatabase: AppDatabase) {
+class UserRepository(private val appDatabase: AppDatabase) {
 
     fun login(userId: String, password: String, onResult: (Int) -> Unit) {
         val retrofit = Retrofit.Builder()

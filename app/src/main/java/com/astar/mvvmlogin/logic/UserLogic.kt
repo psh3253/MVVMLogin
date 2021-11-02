@@ -3,7 +3,7 @@ package com.astar.mvvmlogin.logic
 import com.astar.mvvmlogin.dao.AppDatabase
 import com.astar.mvvmlogin.info.UserInfo
 import com.astar.mvvmlogin.model.Account
-import com.astar.mvvmlogin.repository.LoginRepository
+import com.astar.mvvmlogin.repository.UserRepository
 import com.astar.mvvmlogin.view.LoginFragment
 import com.astar.mvvmlogin.viewmodel.LoginViewModel
 
@@ -11,7 +11,7 @@ class UserLogic(
     private val loginViewModel: LoginViewModel,
     private val loginFragment: LoginFragment
 ) {
-    private val loginRepository = LoginRepository(
+    private val loginRepository = UserRepository(
         AppDatabase.getInstance(loginFragment.requireContext())!!
     )
 
@@ -44,7 +44,7 @@ class UserLogic(
         }
     }
 
-    fun getLoginRepository(): LoginRepository {
+    fun getLoginRepository(): UserRepository {
         return loginRepository
     }
 }
