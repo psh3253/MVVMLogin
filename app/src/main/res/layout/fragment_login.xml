@@ -11,7 +11,7 @@
 
         <variable
             name="loginLogic"
-            type="com.astar.mvvmlogin.logic.LoginLogic" />
+            type="com.astar.mvvmlogin.logic.UserLogic" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -8,7 +8,7 @@ import com.astar.mvvmlogin.model.Account
 interface UserDao {
 
     @Query("select * from account")
-    fun getAccount(): Account?
+    fun select(): Account?
 
     @Insert(onConflict = REPLACE)
     fun insert(account: Account)

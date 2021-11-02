@@ -9,11 +9,10 @@ import retrofit2.http.POST
 class ServerApi {
     companion object {
         const val DOMAIN = "http://ec2-13-209-12-187.ap-northeast-2.compute.amazonaws.com:12301/"
-        //const val API_KEY = "서버 API 키"
     }
 }
 
-interface ServerService {
+interface UserService {
     @POST("login")
     @FormUrlEncoded
     fun loginRequest(

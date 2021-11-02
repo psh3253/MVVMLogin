@@ -11,9 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.astar.mvvmlogin.R
 import com.astar.mvvmlogin.databinding.FragmentLoginBinding
-import com.astar.mvvmlogin.info.UserInfo
-import com.astar.mvvmlogin.logic.LoginLogic
-import com.astar.mvvmlogin.model.Account
+import com.astar.mvvmlogin.logic.UserLogic
 import com.astar.mvvmlogin.viewmodel.LoginViewModel
 
 class LoginFragment : Fragment() {
@@ -25,7 +23,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val loginBinding: FragmentLoginBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
-        val loginLogic = LoginLogic(loginViewModel, this)
+        val loginLogic = UserLogic(loginViewModel, this)
         val mainActivity = activity as MainActivity
         loginBinding.loginViewModel = loginViewModel
         loginBinding.loginLogic = loginLogic
@@ -36,7 +34,7 @@ class LoginFragment : Fragment() {
         }
         loginViewModel.isLogin.observe(viewLifecycleOwner, isLoginObserver)
 
-        val account = loginLogic.getUserDao().getAccount()
+        val account = loginLogic.getLoginRepository().getSavedAccount()
         if(account != null) {
             loginViewModel.userId.value = account.userId
             loginViewModel.password.value = account.password

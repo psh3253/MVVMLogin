@@ -1,23 +1,52 @@
 package com.astar.mvvmlogin.repository
 
-import com.astar.mvvmlogin.dao.UserDao
-import com.astar.mvvmlogin.remote.UserRetrofit
-import com.astar.mvvmlogin.viewmodel.LoginViewModel
+import com.astar.mvvmlogin.ServerApi
+import com.astar.mvvmlogin.UserService
+import com.astar.mvvmlogin.dao.AppDatabase
+import com.astar.mvvmlogin.model.Account
+import com.astar.mvvmlogin.model.GenericResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
-class LoginRepository private constructor(val userDao: UserDao) {
-    companion object {
-        @Volatile private var INSTANCE: LoginRepository? = null
-        private val userRetrofit = UserRetrofit()
+class LoginRepository(private val appDatabase: AppDatabase) {
 
-        fun getInstance(userDao: UserDao): LoginRepository =
-            INSTANCE ?: synchronized(this) {
-                INSTANCE ?: LoginRepository(userDao).also { INSTANCE = it }
-            }
+    fun login(userId: String, password: String, onResult: (Int) -> Unit) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(ServerApi.DOMAIN)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val userService = retrofit.create(UserService::class.java)
+        userService.loginRequest(userId, password)
+            .enqueue(object : Callback<GenericResponse> {
+                override fun onResponse(
+                    call: Call<GenericResponse>,
+                    response: Response<GenericResponse>
+                ) {
+                   if(response.body()?.code == 200) {
+                       onResult(0)
+                   } else {
+                       onResult(3)
+                   }
+                }
+
+                override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
+                    onResult(4)
+                }
+            })
     }
 
-    fun login(userId: String, password: String): Int {
-        return userRetrofit.login(userId, password)
+    fun getSavedAccount(): Account?  {
+        return appDatabase.userDao().select()
     }
 
+    fun saveAccount(account: Account) {
+        appDatabase.userDao().insert(account)
+    }
 
+    fun deleteAccount() {
+        appDatabase.userDao().delete()
+    }
 }
